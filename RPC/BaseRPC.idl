@@ -1,0 +1,25 @@
+import "oaidl.idl";
+import "ocidl.idl";
+[
+	uuid("c580bbe1-14ca-4dc8-8171-ec9adf4cf9d1"),   // 唯一的UUID，用 GUIDGen 生成
+	version(1.0)
+]
+
+interface BaseRPC
+{
+	// 官方文档推荐的自定义字符串写法(带长度和大小)
+#pragma pack(1)
+	typedef struct _RPCSTRING
+	{
+		unsigned short size;
+		unsigned short length;
+		[ptr, size_is(size), length_is(length)] char string[*];
+	}RPCSTRING;
+#pragma pack()
+	typedef [ptr] RPCSTRING** PPRPCSTRING;
+	typedef [ptr] RPCSTRING* PRPCSTRING;
+
+	// 我们定义的方法
+	void RPC_Request([in, string]const char * pszIn, [out]PRPCSTRING *pszOut);
+	void RPC_Shutdown(void);
+}
